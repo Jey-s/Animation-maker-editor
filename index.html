@@ -64,13 +64,6 @@ body::before{content:"";position:fixed;inset:-25%;z-index:0;pointer-events:none;
 .out{display:none}.out.show{display:block}.stage{border-radius:14px;background:repeating-conic-gradient(#1c1710 0 25%,#0c0a07 0 50%) 0 0/20px 20px;border:1px solid var(--line);padding:16px;text-align:center}.stage img,.stage video{max-width:100%;max-height:560px}
 :focus-visible{outline:2px solid var(--gl);outline-offset:2px}
 /* static flame glow in the background */
-#flame{position:fixed;left:0;right:0;bottom:0;height:88vh;z-index:0;pointer-events:none;overflow:hidden}
-.fl{position:absolute;bottom:0;transform:translateX(-50%);transform-origin:50% 100%;will-change:transform,opacity;background:radial-gradient(ellipse 50% 100% at 50% 100%,rgba(var(--c),var(--a)),transparent 72%);animation:fa 3.4s ease-in-out infinite alternate}
-.fl.b{animation-name:fb}
-@keyframes fa{0%{transform:translateX(-50%) scale(1,1);opacity:.75}22%{transform:translateX(calc(-50% + 16px)) scale(.9,1.14);opacity:1}48%{transform:translateX(calc(-50% - 12px)) scale(1.06,.88);opacity:.65}74%{transform:translateX(calc(-50% + 8px)) scale(.94,1.08);opacity:.95}100%{transform:translateX(calc(-50% - 4px)) scale(1.02,.96);opacity:.8}}
-@keyframes fb{0%{transform:translateX(-50%) scale(1,.92);opacity:.9}30%{transform:translateX(calc(-50% - 18px)) scale(1.08,1.12);opacity:.65}58%{transform:translateX(calc(-50% + 10px)) scale(.92,.94);opacity:1}82%{transform:translateX(calc(-50% - 6px)) scale(1.04,1.1);opacity:.7}100%{transform:translateX(calc(-50% + 12px)) scale(.97,1);opacity:.9}}
-html.paused .fl{animation-play-state:paused}
-@media(prefers-reduced-motion:reduce){.fl{animation:none}}
 html.paused body::before{animation-play-state:paused}
 /* privacy badge */
 .priv{position:fixed;top:16px;right:16px;z-index:20}
@@ -90,9 +83,9 @@ html.paused body::before{animation-play-state:paused}
 .rules{display:flex;flex-direction:column;gap:10px}
 .rule{display:grid;grid-template-columns:1fr 190px;gap:16px;align-items:center;padding:14px 16px;border:1px solid var(--line);border-radius:14px;background:#0d0b0899}
 .rt{display:flex;gap:12px;align-items:flex-start;cursor:pointer}div.rt{cursor:default}.rt input{margin-top:2px;flex:none}.rt b{display:block;font-weight:500}.rt small{display:block;color:var(--mut);font-size:13px;margin-top:2px;line-height:1.4}
-.rv{font-size:13px;color:var(--mut);transition:opacity .2s}.rv span{display:block}.rv .num{margin-top:6px}.rule.off .rv{opacity:.4}
+.rv{font-size:13px;color:var(--mut);transition:opacity .2s}.rv span{display:block}.rv .num{margin-top:6px}.rule.off .rv{opacity:.4}.rule.dis{opacity:.5}.rule.dis .rt{cursor:not-allowed}input[type=checkbox]:disabled{cursor:not-allowed}
 @media(max-width:620px){.rule{grid-template-columns:1fr}}
-</style></head><body><div id="flame"><i class="fl" style="left:6%;width:40%;height:65vh;--c:255,130,45;--a:0.2;animation-duration:3.7s;animation-delay:-1s"></i><i class="fl b" style="left:7%;width:24%;height:48vh;--c:255,185,90;--a:0.22;animation-duration:2.6s;animation-delay:-2s"></i><i class="fl" style="left:6%;width:11%;height:28vh;--c:255,238,185;--a:0.22;animation-duration:1.9s;animation-delay:-0.5s"></i><i class="fl b" style="left:15%;width:18%;height:33vh;--c:255,160,70;--a:0.15;animation-duration:3.1s;animation-delay:-1.7s"></i><i class="fl b" style="left:95%;width:36%;height:58vh;--c:255,130,45;--a:0.18;animation-duration:4.1s;animation-delay:-2.2s"></i><i class="fl" style="left:94%;width:22%;height:42vh;--c:255,190,95;--a:0.2;animation-duration:2.9s;animation-delay:-0.8s"></i><i class="fl b" style="left:95%;width:10%;height:25vh;--c:255,238,185;--a:0.2;animation-duration:2.1s;animation-delay:-1.4s"></i><i class="fl" style="left:86%;width:16%;height:30vh;--c:255,160,70;--a:0.13;animation-duration:3.5s;animation-delay:-2.9s"></i><i class="fl" style="left:50%;width:84%;height:35vh;--c:201,164,92;--a:0.16;animation-duration:5.2s;animation-delay:-1.2s"></i><i class="fl b" style="left:50%;width:32%;height:23vh;--c:255,150,60;--a:0.12;animation-duration:2.8s;animation-delay:-0.3s"></i></div><canvas id="bg"></canvas><div class="priv"><button id="privb" aria-expanded="false" aria-controls="privp"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2.2 2.2L15.5 10"/></svg><span class="pl">Processed on your device</span><span class="ps">On-device</span></button>
+</style></head><body><canvas id="bg"></canvas><div class="priv"><button id="privb" aria-expanded="false" aria-controls="privp"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2.2 2.2L15.5 10"/></svg><span class="pl">Processed on your device</span><span class="ps">On-device</span></button>
 <div class="priv-pop" id="privp" role="dialog" aria-label="About local processing" hidden><h4>Everything stays on your device</h4><p>Framewright runs entirely inside your browser. Nothing you add is uploaded to a server.</p><ul>
 <li><svg viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></svg><span>Your files never leave this tab. Frames, videos and results stay in your browser.</span></li>
 <li><svg viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></svg><span>Your own computer does the encoding, so speed depends on your device, not on a server.</span></li>
@@ -130,20 +123,19 @@ html.paused body::before{animation-play-state:paused}
  <section class="panel"><h2>Shrink it</h2><p class="note">Make the file smaller while keeping it looking as good as possible.</p>
   <div class="fmts pills" id="omode" role="group" aria-label="Method"><button data-m="auto" aria-pressed="true">Automatic</button><button data-m="man" aria-pressed="false">Manual</button></div>
   <p class="note" id="omodeh" style="margin-top:-6px"></p>
-  <div class="step"><h3><i>1</i>Formats</h3><p class="note">Tick the formats you are happy with. Automatic picks the smallest result, Manual makes one file per format.</p><div id="ofmts" class="chips"></div></div>
+  <div class="step"><h3><i>1</i>Formats</h3><p class="note">Tick the formats it may use. Untick them all to keep the original format. Automatic picks the smallest result, Manual makes one file per format.</p><div id="ofmts" class="chips"></div></div>
   <div id="oauto">
    <div class="step"><h3><i>2</i>Target size</h3>
     <div class="rule"><div class="rt"><span><b>Aim for this file size</b><small>Leave empty to aim for 35% of the original.</small></span></div><label class="rv"><span>Target <em>(MB)</em></span><input type="number" id="a-t" min="0.1" step="0.1" placeholder="auto"></label></div></div>
    <div class="step"><h3><i>3</i>What may be changed</h3><p class="note">Untick anything that must stay exactly as it is.</p><div class="rules">
     <div class="rule opt"><label class="rt"><input type="checkbox" id="a-q" checked><span><b>Lower the quality</b><small>A slightly softer picture for a much smaller file.</small></span></label><label class="rv"><span>Lowest quality <em>(10 to 80)</em></span><input type="number" id="a-qv" min="10" max="80" step="5" value="40"></label></div>
     <div class="rule opt"><label class="rt"><input type="checkbox" id="a-w" checked><span><b>Scale it down</b><small>Fewer pixels, so a smaller file.</small></span></label><label class="rv"><span>Smallest size <em>(% of width)</em></span><input type="number" id="a-wv" min="10" max="100" step="5" value="50"></label></div>
-    <div class="rule opt"><label class="rt"><input type="checkbox" id="a-k" checked><span><b>Drop frames</b><small>Fewer frames, so slightly less smooth motion.</small></span></label><label class="rv"><span>Keep at least <em>(% of frames)</em></span><input type="number" id="a-kv" min="30" max="100" step="5" value="50"></label></div>
-    <div class="rule"><label class="rt"><input type="checkbox" id="a-f" checked><span><b>Change the format</b><small>Allowed to switch to any format ticked above. If unticked, the original format is kept.</small></span></label></div>
-    <div class="rule"><label class="rt"><input type="checkbox" id="a-a" checked><span><b>Keep see-through backgrounds</b><small>Only GIF, WebP and APNG can be see-through, so video formats are skipped.</small></span></label></div></div></div></div>
+    <div class="rule opt"><label class="rt"><input type="checkbox" id="a-k" checked><span><b>Drop frames</b><small id="kinfo">Fewer frames, so slightly less smooth motion.</small></span></label><label class="rv"><span>Keep at least <em>(frames)</em></span><input type="number" id="a-kv" min="2" step="1" placeholder="half"></label></div>
+    <div class="rule"><label class="rt"><input type="checkbox" id="a-a" checked><span><b>Keep see-through backgrounds</b><small id="ainfo">Only GIF, WebP and APNG can be see-through, so video formats are skipped.</small></span></label></div></div></div></div>
   <div id="oman" hidden><div class="step"><h3><i>2</i>Settings</h3><p class="note">These exact settings are applied once for every format you ticked.</p><div class="fields">
    <label>Quality <em>(10 to 100)</em><input type="number" id="m-q" min="10" max="100" step="5" value="60"></label>
    <label>Size <em>(% of width)</em><input type="number" id="m-w" min="10" max="100" step="5" value="75"></label>
-   <label>Drop every Nth frame<input type="number" id="m-s" min="0" step="1" placeholder="off"></label></div></div></div>
+   <label>Drop every Nth frame<input type="number" id="m-s" min="0" step="1" placeholder="off"><span class="sub" id="mhint">3 = drop every 3rd frame. Leave empty to keep all.</span></label></div></div></div>
   <button class="go" id="ogo" disabled>Optimise</button><div class="bar" id="obar"><i></i></div><p class="note" id="ostatus" style="margin:12px 0 0"></p></section>
  <section class="panel out" id="oout"><h2>Smaller version</h2><div class="fmts pills" id="ores"></div><div class="stage" id="ostage"></div>
   <div class="row"><span class="sp" id="ometa"></span><a class="btn" id="odl">Download</a></div></section>
@@ -3590,8 +3582,8 @@ async function encWebp(fr,W,H,loop,q){
  const ch=(t,p)=>U([str(t),le(p.length,4),[...p],p.length&1?[0]:[]]),chunks=[];
  for(let n=0;n<fr.length;n++){await use(fr[n],0);const b=await blob('image/webp',q/100);if(b.type!=='image/webp')throw new Error('This browser cannot encode WebP. Try Chrome or Edge.');
   const u=new Uint8Array(await b.arrayBuffer()),data=[];let len=16;
-  for(let p=12;p<u.length;){const t=String.fromCharCode(...u.subarray(p,p+4)),l=u[p+4]|u[p+5]<<8|u[p+6]<<16|u[p+7]<<24,tot=8+l+(l&1);if(t!=='VP8X'){data.push(u.subarray(p,p+tot));len+=tot}p+=tot}
-  chunks.push(U([str('ANMF'),le(len,4),le(0,6),le(W-1,3),le(H-1,3),le(Math.round(fr[n].d),3),[0]]),...data);prog(n+1,fr.length,'Encoding frame')}
+  for(let p=12;p<u.length;){const t=String.fromCharCode(...u.subarray(p,p+4)),l=u[p+4]|u[p+5]<<8|u[p+6]<<16|u[p+7]<<24,tot=8+l+(l&1);if(t==='ALPH'||t==='VP8 '||t==='VP8L'){data.push(u.subarray(p,p+tot));len+=tot}p+=tot}
+  chunks.push(U([str('ANMF'),le(len,4),le(0,6),le(W-1,3),le(H-1,3),le(Math.round(fr[n].d),3),[2]]),...data);prog(n+1,fr.length,'Encoding frame')}
  const head=[ch('VP8X',[0x12,0,0,0,...le(W-1,3),...le(H-1,3)]),ch('ANIM',[0,0,0,0,...le(loop?0:1,2)])],total=4+[...head,...chunks].reduce((a,c)=>a+c.length,0);
  return new Blob([U([str('RIFF'),le(total,4),str('WEBP')]),...head,...chunks],{type:'image/webp'})}
 
@@ -3649,24 +3641,34 @@ $('#tog').onclick=()=>{const n=$('#nav');n.classList.toggle('min');$('#tog').set
 FM.forEach(f=>{const l=document.createElement('label');l.className='ck';l.innerHTML=`<input type="checkbox" value="${f}" ${f==='gif'||f==='webp'||f==='mp4'||f==='webm'?'checked':''}> .${f}`;$('#ofmts').append(l)});
 const fmtOf=f=>{const t=(f.type+f.name).toLowerCase();return/gif/.test(t)?'gif':/webp/.test(t)?'webp':/webm/.test(t)?'webm':/quicktime|\.mov/.test(t)?'mov':/mp4|m4v/.test(t)?'mp4':'apng'};
 let omode='auto';const MH={auto:'Automatic tries different settings until the file is about as small as your target. You decide what it may change.',man:'Manual applies exactly the settings below, with no guessing.'};
-function fsync(){$('#ofmts').classList.toggle('off',omode==='auto'&&!$('#a-f').checked)}
-document.querySelectorAll('#omode button').forEach(b=>b.onclick=()=>{omode=b.dataset.m;document.querySelectorAll('#omode button').forEach(c=>c.setAttribute('aria-pressed',c===b));$('#oauto').hidden=omode!=='auto';$('#oman').hidden=omode!=='man';$('#omodeh').textContent=MH[omode];fsync()});$('#omodeh').textContent=MH.auto;$('#a-f').onchange=fsync;
+document.querySelectorAll('#omode button').forEach(b=>b.onclick=()=>{omode=b.dataset.m;document.querySelectorAll('#omode button').forEach(c=>c.setAttribute('aria-pressed',c===b));$('#oauto').hidden=omode!=='auto';$('#oman').hidden=omode!=='man';$('#omodeh').textContent=MH[omode]});$('#omodeh').textContent=MH.auto;
 for(const[c,k]of[['a-q','a-qv'],['a-w','a-wv'],['a-k','a-kv']]){const sync=()=>{const on=$('#'+c).checked;$('#'+k).closest('.opt').classList.toggle('off',!on)};$('#'+c).onchange=sync}
-function setOptFile(f,b){optSrc=f;optBase=b||stem(f.name);const o=$('#osrc'),vid=fmtOf(f)==='mp4'||fmtOf(f)==='webm'||fmtOf(f)==='mov',m=document.createElement(vid?'video':'img');m.src=URL.createObjectURL(f);if(vid)m.muted=m.loop=m.autoplay=true;
- const t=document.createElement('span');t.textContent=`${f.name}, ${sz(f.size)}${b?' (from Create)':''}`;o.innerHTML='';o.append(m,t);$('#ogo').disabled=false;$('#oout').classList.remove('show')}
+const KDEF='Fewer frames, so slightly less smooth motion.';
+function setFrames(n){const k=$('#a-k'),kv=$('#a-kv'),one=n>0&&n<2;k.disabled=one;k.closest('.rule').classList.toggle('dis',one);
+ $('#kinfo').textContent=!n?KDEF:one?'This is a single image, so there are no frames to drop.':`This animation has ${n} frames. ${KDEF}`;
+ $('#mhint').textContent=n>1?`3 = drop every 3rd frame. Leave empty to keep all ${n}.`:'3 = drop every 3rd frame. Leave empty to keep all.';
+ if(n>1){kv.max=n;kv.value=Math.max(2,Math.ceil(n/2))}else if(!n)kv.value=''}
+async function countFrames(f){const k=fmtOf(f);
+ if(/^(mp4|webm|mov)$/.test(k)){const v=await loadVid(f),n=Math.min(Math.floor(v.duration*(lastMs?1000/lastMs:10)),600);URL.revokeObjectURL(v.src);return n}
+ const t=f.type||'image/'+f.name.split('.').pop().toLowerCase();
+ if(window.ImageDecoder&&await ImageDecoder.isTypeSupported(t)){const d=new ImageDecoder({data:await f.arrayBuffer(),type:t});await d.tracks.ready;const n=d.tracks.selectedTrack.frameCount;d.close();return n}return 1}
+function setOptFile(f,b){optSrc=f;optBase=b||stem(f.name);const o=$('#osrc'),k=fmtOf(f),vid=/^(mp4|webm|mov)$/.test(k),m=document.createElement(vid?'video':'img');m.src=URL.createObjectURL(f);if(vid)m.muted=m.loop=m.autoplay=true;
+ const t=document.createElement('span'),base=`${f.name}, ${sz(f.size)}${b?' (from Create)':''}`;t.textContent=base;o.innerHTML='';o.append(m,t);$('#ogo').disabled=false;$('#oout').classList.remove('show');
+ const al=$('#a-a');al.disabled=vid;al.closest('.rule').classList.toggle('dis',vid);$('#ainfo').textContent=vid?'Not available: this file is a video, and videos cannot be see-through.':'Only GIF, WebP and APNG can be see-through, so video formats are skipped.';
+ setFrames(0);countFrames(f).then(n=>{if(optSrc!==f)return;setFrames(n);t.textContent=`${base}, ${n} frame${n===1?'':'s'}`}).catch(()=>{})}
 $('#obrowse').onclick=()=>$('#opick').click();$('#opick').onchange=e=>{if(e.target.files[0])setOptFile(e.target.files[0]);e.target.value=''};
-function ladder(a){const sk=[0,6,4,3,2].filter(n=>!n||(n-1)/n>=a.keep/100);return[...Array(5)].map((_,i)=>{const t=i/4;return{q:Math.round(a.qOn?80+(Math.min(80,a.minQ)-80)*t:80),sc:a.wOn?1+(a.minW/100-1)*t:1,skip:a.kOn?sk[Math.min(sk.length-1,Math.floor(t*sk.length))]:0}})}
+function ladder(a){const sk=[0,6,4,3,2].filter(n=>!n||a.count-Math.floor(a.count/n)>=a.keep);return[...Array(5)].map((_,i)=>{const t=i/4;return{q:Math.round(a.qOn?80+(Math.min(80,a.minQ)-80)*t:80),sc:a.wOn?1+(a.minW/100-1)*t:1,skip:a.kOn?sk[Math.min(sk.length-1,Math.floor(t*sk.length))]:0}})}
 function pickRes(i,inSize){const r=optRes[i];document.querySelectorAll('#ores button').forEach((b,j)=>b.setAttribute('aria-pressed',j===i));view(r.b,r.f,inSize,'o',`${optBase} - Framewright optimised`)}
 async function optRun(){
  if(!optSrc)return;const btn=$('#ogo');btn.disabled=true;$('#oout').classList.remove('show');const man=omode==='man';
  try{const sf=fmtOf(optSrc),inSize=optSrc.size,v=id=>+$('#'+id).value,c=id=>$('#'+id).checked;say('Reading frames...');
   const b=await build({w:0,fps:/mp4|webm|mov/.test(sf)&&lastMs?1000/lastMs:0},[optSrc]),fr=b.fr,tot=fr.reduce((a,x)=>a+x.d,0);
   let ok=[...document.querySelectorAll('#ofmts input:checked')].map(i=>i.value);
-  if(!man){if(!c('a-f'))ok=[sf];else if(c('a-a'))ok=ok.filter(f=>['gif','webp','apng'].includes(f))}
-  if(!ok.length)throw new Error('Tick at least one format that fits your settings.');
+  if(!man&&c('a-a')&&!$('#a-a').disabled)ok=ok.filter(f=>['gif','webp','apng'].includes(f));
+  if(!ok.length)ok=[sf];
   const geo=g=>[ev(b.W*g.sc),ev(b.H*g.sc)],full=async(f,g)=>{const[W,H]=geo(g);cv.width=W;cv.height=H;return encode(f,edit(fr,{skip:g.skip,rev:0,speed:1}),W,H,true,g.q)};let res=[];
   if(man){const g={q:v('m-q')||60,sc:(v('m-w')||100)/100,skip:v('m-s')||0};for(const f of ok){say(`Encoding .${f}...`);res.push({f,b:await full(f,g)})}}
-  else{const L=ladder({qOn:c('a-q'),minQ:v('a-qv')||40,wOn:c('a-w'),minW:v('a-wv')||50,kOn:c('a-k'),keep:v('a-kv')||50}),target=(v('a-t')||0)*1e6||inSize*.35,top=L.length-1;
+  else{const L=ladder({qOn:c('a-q'),minQ:v('a-qv')||40,wOn:c('a-w'),minW:v('a-wv')||50,kOn:c('a-k')&&!$('#a-k').disabled,keep:v('a-kv')||Math.ceil(fr.length/2),count:fr.length}),target=(v('a-t')||0)*1e6||inSize*.35,top=L.length-1;
    const est=async(f,s)=>{const g=L[s],[W,H]=geo(g);cv.width=W;cv.height=H;const k=Math.max(1,Math.floor(fr.length/14)),sub=fr.filter((_,i)=>i%k===0).slice(0,14),x=(await encode(f,sub,W,H,true,g.q)).size;
     return/mp4|webm|mov/.test(f)?x*tot/sub.reduce((a,y)=>a+y.d,0):x/sub.length*fr.length*(g.skip>1?(g.skip-1)/g.skip:1)};
    const picks=[];for(const f of ok){say(`Testing .${f}...`);let lo=0,hi=top,eh=await est(f,hi);if(eh>target){picks.push({f,s:hi,e:eh,ok:0});continue}
@@ -3680,20 +3682,37 @@ async function optRun(){
 $('#ogo').onclick=optRun;
 bgDim();document.querySelectorAll('#swb').forEach(w=>{for(const c of['#00ff00','#ff00ff','#000000','#ffffff']){const b=document.createElement('button');b.type='button';b.style.background=c;b.title=c;b.setAttribute('aria-label','Background '+c);b.onclick=()=>{$('#bgc').value=c;sync()};w.append(b)}});
 const sync=()=>{const v=$('#bgc').value;$('#bgh').textContent=v;document.querySelectorAll('#swb button').forEach(b=>b.setAttribute('aria-pressed',b.title===v))};$('#bgc').oninput=sync;sync();render();
-/* ---------- drifting gold particles (no mouse interaction; paused whenever the window is not in use) ---------- */
-(()=>{const c=$('#bg'),x=c.getContext('2d'),calm=matchMedia('(prefers-reduced-motion:reduce)'),root=document.documentElement;let W,H,P=[],raf=0;
- const init=()=>{W=c.width=innerWidth;H=c.height=innerHeight;P=Array.from({length:Math.min(120,Math.round(W*H/13000))},()=>{const a=Math.random()*6.28,s=.1+Math.random()*.25;return{x:Math.random()*W,y:Math.random()*H,bx:Math.cos(a)*s,by:Math.sin(a)*s,r:.5+Math.random()*1.5}})};
- function draw(){x.clearRect(0,0,W,H);for(const p of P){p.x=(p.x+p.bx+W)%W;p.y=(p.y+p.by+H)%H}
-  for(let i=0;i<P.length;i++){const a=P[i];for(let j=i+1;j<P.length;j++){const b=P[j],d=Math.hypot(a.x-b.x,a.y-b.y);if(d<120){x.strokeStyle=`rgba(201,164,92,${.22*(1-d/120)})`;x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.stroke()}}}
-  for(const a of P){x.fillStyle='rgba(236,217,160,.1)';x.beginPath();x.arc(a.x,a.y,a.r*4,0,6.28);x.fill();x.fillStyle='rgba(201,164,92,.65)';x.beginPath();x.arc(a.x,a.y,a.r,0,6.28);x.fill()}}
- const loop=()=>{draw();raf=requestAnimationFrame(loop)};
+/* ---------- particles that flow around the cursor + hearth flames, drawn on one canvas ---------- */
+(()=>{const c=$('#bg'),x=c.getContext('2d'),calm=matchMedia('(prefers-reduced-motion:reduce)'),root=document.documentElement,m={x:-999,y:-999},TAU=Math.PI*2;let W,H,P=[],raf=0;
+ /* [centre x %, width %, height % of screen, colour, strength, seconds per sway, offset] */
+ const FL=[[6,40,65,'255,130,45',.20,3.7,-1],[7,24,48,'255,185,90',.22,2.6,-2],[6,11,28,'255,238,185',.22,1.9,-.5],[15,18,33,'255,160,70',.15,3.1,-1.7],
+  [95,36,58,'255,130,45',.18,4.1,-2.2],[94,22,42,'255,190,95',.20,2.9,-.8],[95,10,25,'255,238,185',.20,2.1,-1.4],[86,16,30,'255,160,70',.13,3.5,-2.9],
+  [50,84,35,'201,164,92',.16,5.2,-1.2],[50,32,23,'255,150,60',.12,2.8,-.3]],sprites={};
+ const spr=rgb=>sprites[rgb]||(sprites[rgb]=(()=>{const s=document.createElement('canvas');s.width=s.height=128;const g=s.getContext('2d');g.translate(64,128);g.scale(1,2);
+  const r=g.createRadialGradient(0,0,0,0,0,64);r.addColorStop(0,`rgba(${rgb},1)`);r.addColorStop(.72,`rgba(${rgb},0)`);r.addColorStop(1,`rgba(${rgb},0)`);g.fillStyle=r;g.fillRect(-64,-64,128,64);return s})());
+ const init=()=>{W=c.width=innerWidth;H=c.height=innerHeight;P=Array.from({length:Math.min(120,Math.round(W*H/13000))},()=>{const a=Math.random()*TAU,s=.1+Math.random()*.25;return{x:Math.random()*W,y:Math.random()*H,bx:Math.cos(a)*s,by:Math.sin(a)*s,vx:0,vy:0,r:.5+Math.random()*1.5}})};
+ function flames(t){x.globalCompositeOperation='lighter';x.imageSmoothingQuality='high';
+  FL.forEach(([px,pw,ph,rgb,a,dur,dl],i)=>{const w=TAU/dur,o=dl*w+i*1.7,s1=Math.sin(t*w+o),s2=Math.sin(t*w*2.3+o*1.7),s3=Math.sin(t*w*4.1+i),
+   sy=1+.1*s1+.05*s2+.025*s3,sx=1-.55*(sy-1),dx=s1*14+s2*7,al=a*1.15*(.82+.14*s2+.08*s3+.06*s1),fw=W*pw/100*sx,fh=H*ph/100*sy;
+   x.globalAlpha=Math.max(0,Math.min(1,al));x.drawImage(spr(rgb),W*px/100+dx-fw/2,H-fh,fw,fh)});
+  x.globalAlpha=1;x.globalCompositeOperation='source-over'}
+ function draw(t){x.clearRect(0,0,W,H);flames(t);
+  if(!calm.matches)for(const p of P){const dx=p.x-m.x,dy=p.y-m.y,d=Math.hypot(dx,dy);if(d<150&&d>0){p.vx+=dx/d*.12;p.vy+=dy/d*.12}
+   p.vx+=(p.bx-p.vx)*.02;p.vy+=(p.by-p.vy)*.02;p.x=(p.x+p.vx+W)%W;p.y=(p.y+p.vy+H)%H}
+  for(let i=0;i<P.length;i++){const a=P[i];
+   for(let j=i+1;j<P.length;j++){const b=P[j],d=Math.hypot(a.x-b.x,a.y-b.y);if(d<120){x.strokeStyle=`rgba(201,164,92,${.22*(1-d/120)})`;x.beginPath();x.moveTo(a.x,a.y);x.lineTo(b.x,b.y);x.stroke()}}
+   const dm=Math.hypot(a.x-m.x,a.y-m.y);if(dm<170){x.strokeStyle=`rgba(236,217,160,${.5*(1-dm/170)})`;x.beginPath();x.moveTo(a.x,a.y);x.lineTo(m.x,m.y);x.stroke()}}
+  for(const a of P){const near=Math.hypot(a.x-m.x,a.y-m.y)<170;x.fillStyle=near?'rgba(236,217,160,.24)':'rgba(236,217,160,.1)';x.beginPath();x.arc(a.x,a.y,a.r*4,0,TAU);x.fill();
+   x.fillStyle=near?'rgba(236,217,160,.95)':'rgba(201,164,92,.65)';x.beginPath();x.arc(a.x,a.y,a.r,0,TAU);x.fill()}}
+ const loop=now=>{draw(now/1000);raf=requestAnimationFrame(loop)};
  const stop=()=>{cancelAnimationFrame(raf);raf=0;root.classList.add('paused')};
  const go=()=>{root.classList.remove('paused');if(!raf&&!calm.matches&&!document.hidden)raf=requestAnimationFrame(loop)};
  /* wait two frames after returning to the window so the browser has finished repainting before animations restart */
  const back=()=>requestAnimationFrame(()=>requestAnimationFrame(go));
- addEventListener('resize',()=>{init();if(calm.matches)draw()});
+ addEventListener('resize',()=>{init();if(calm.matches)draw(0)});
+ addEventListener('pointermove',e=>{m.x=e.clientX;m.y=e.clientY});addEventListener('pointerup',e=>{if(e.pointerType!=='mouse')m.x=m.y=-999});root.addEventListener('mouseleave',()=>m.x=m.y=-999);
  document.addEventListener('visibilitychange',()=>document.hidden?stop():back());addEventListener('blur',stop);addEventListener('focus',back);
- init();if(calm.matches)draw();else go()})();
+ init();if(calm.matches)draw(0);else go()})();
 /* ---------- on-device badge ---------- */
 (()=>{const b=$('#privb'),p=$('#privp'),set=o=>{p.hidden=!o;b.setAttribute('aria-expanded',o)};b.onclick=e=>{e.stopPropagation();set(p.hidden)};
  addEventListener('click',e=>{if(!p.hidden&&!p.contains(e.target))set(false)});addEventListener('keydown',e=>{if(e.key==='Escape')set(false)})})();

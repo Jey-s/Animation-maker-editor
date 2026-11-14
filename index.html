@@ -90,6 +90,10 @@ html.paused body::before{animation-play-state:paused}
 .wsum{color:var(--gl);font-size:14px;margin:14px 0 0}.wcmd{margin-top:22px}.wcmd summary{cursor:pointer;color:var(--gl);letter-spacing:.06em}
 .wcmd pre{margin:10px 0;padding:14px;background:var(--in);border:1px solid var(--line);border-radius:12px;color:var(--gl);font:13px/1.5 ui-monospace,Consolas,monospace;white-space:pre-wrap;word-break:break-all}
 .wlbl{display:block;margin:20px 0 8px;color:var(--ivory)}.wlbl em{color:var(--mut);font-style:normal;font-size:13px}.fmts.wp{margin-bottom:6px}
+#wprev{cursor:grab;touch-action:none;outline:none}#wprev:active{cursor:grabbing}#wprev:focus-visible{box-shadow:0 0 0 2px var(--gold)}
+dialog#wpnd{background:var(--panel);color:var(--ivory);border:1px solid var(--line);border-radius:16px;padding:28px;max-width:560px;width:calc(100% - 32px);box-shadow:0 20px 80px #000}dialog#wpnd::backdrop{background:#0a0908cc}
+#wpnd .pn{max-height:60vh;overflow-y:auto;padding-right:6px}#wpnd h3{margin:22px 0 6px;font:500 13px Jost,sans-serif;letter-spacing:.18em;text-transform:uppercase;color:var(--gl)}#wpnd h3 em{color:var(--mut);font-style:normal;letter-spacing:.06em;text-transform:none;margin-left:8px}
+#wpnd ul{margin:0;padding-left:20px;color:var(--ivory);font-size:14.5px;line-height:1.6}#wpnd li::marker{color:var(--gold)}nav .tab.pnb{margin-top:18px;border-top:1px solid var(--line);border-radius:0 0 14px 14px;padding-top:16px}
 </style></head><body><canvas id="bg"></canvas><div class="priv"><button id="privb" aria-expanded="false" aria-controls="privp"><svg viewBox="0 0 24 24"><path d="M12 3 5 6v5c0 4.5 3 8 7 10 4-2 7-5.5 7-10V6l-7-3Z"/><path d="m9 12 2.2 2.2L15.5 10"/></svg><span class="pl">Processed on your device</span><span class="ps">On-device</span></button>
 <div class="priv-pop" id="privp" role="dialog" aria-label="About local processing" hidden><h4>Everything stays on your device</h4><p>Framewright runs entirely inside your browser. Nothing you add is uploaded to a server.</p><ul>
 <li><svg viewBox="0 0 24 24"><path d="m5 12 4.5 4.5L19 7"/></svg><span>Your files never leave this tab. Frames, videos and results stay in your browser.</span></li>
@@ -99,7 +103,8 @@ html.paused body::before{animation-play-state:paused}
 <div class="shell"><nav id="nav"><button id="tog" aria-label="Collapse menu"><svg viewBox="0 0 24 24"><path d="m15 6-6 6 6 6"/></svg></button>
  <button class="tab" data-t="create" aria-current="true"><svg viewBox="0 0 24 24"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="M7 5v14M17 5v14M3 9.5h4M3 14.5h4M17 9.5h4M17 14.5h4"/></svg><span>Create</span></button>
  <button class="tab" data-t="opt"><svg viewBox="0 0 24 24"><path d="M4 7h10M18 7h2M4 17h2M10 17h10"/><circle cx="16" cy="7" r="2"/><circle cx="8" cy="17" r="2"/></svg><span>Optimise</span></button>
- <button class="tab" data-t="wall"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span>Wallpaper</span></button></nav><main>
+ <button class="tab" data-t="wall"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="12" rx="2"/><path d="M8 20h8M12 16v4"/></svg><span>Wallpaper</span></button>
+ <button class="tab pnb" id="wpn" type="button"><svg viewBox="0 0 24 24"><path d="M7 3h10a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z"/><path d="M9 8h6M9 12h6M9 16h3"/></svg><span>Patch notes</span></button></nav><main>
 <header><h1>Framewright</h1><p>Animation atelier. Frames in, motion out.</p><hr></header>
 <div id="t-create" class="tabc">
 <section class="panel"><h2>Your material</h2><p class="note" id="hint">Drop anything on this page: a GIF, WebP, video, or hundreds of frames at once.</p>
@@ -155,9 +160,11 @@ html.paused body::before{animation-play-state:paused}
  <input type="file" id="wfpick" multiple accept="image/*" hidden><input type="file" id="wfdir" webkitdirectory hidden>
  <div class="row"><button class="btn" id="wf1">Choose files</button><button class="btn" id="wf2">Choose a folder</button><span class="sp" id="wfinfo"></span><button class="btn" id="wclear">Clear</button></div>
  <p class="wsum" id="wloop"></p></section>
-<section class="panel"><h2>Preview</h2><p class="note">Drag the slider to check the composite. Playback runs as fast as your browser can decode 4K frames, so it may look slower than the final video.</p>
- <canvas id="wprev" width="960" height="540"></canvas>
- <div class="row"><button class="btn" id="wplay">Play</button><input type="range" id="wscrub" min="0" max="0" value="0"><span class="sp" id="wfn" style="flex:none"></span></div></section>
+<section class="panel"><h2>Preview</h2><p class="note">Drag the character in the picture to position it (arrow keys work too, Shift for bigger steps). Drag the slider to check other frames. Playback runs as fast as your browser can decode 4K frames, so it may look slower than the final video.</p>
+ <canvas id="wprev" width="960" height="540" tabindex="0" aria-label="Preview. Drag to move the frames."></canvas>
+ <div class="row"><button class="btn" id="wplay">Play</button><input type="range" id="wscrub" min="0" max="0" value="0"><span class="sp" id="wfn" style="flex:none"></span></div>
+ <div class="fields" style="margin-top:20px"><label>Position X <em>(px)</em><input type="number" id="wx" min="-9999" max="9999" step="10" value="0"></label><label>Position Y <em>(px)</em><input type="number" id="wy" min="-9999" max="9999" step="10" value="0"></label><label>Scale <em>(%)</em><input type="number" id="wz" min="10" max="400" step="5" value="100"></label></div>
+ <div class="row"><button class="btn" id="wctr">Centre frames</button><button class="btn" id="wrst">Reset</button><span class="sp">Positions are in background pixels.</span></div></section>
 <section class="panel"><h2>Video</h2><p class="note">An H.264 MP4 aimed at a file size you choose. Your browser's own encoder does the work.</p>
  <div class="fields">
   <label>Frames per second <em class="ref" id="wdur"></em><input type="number" id="wfps" min="1" max="120" step="1" value="30"><span class="sub">Use the rate the animation was made at. The wrong one looks too fast or too slow.</span></label>
@@ -176,6 +183,11 @@ html.paused body::before{animation-play-state:paused}
  <div class="row"><span class="sp" id="wmeta"></span><a class="btn" id="wdl">Download</a></div></section>
 </div>
 </main></div>
+<dialog id="wpnd"><h2>Patch notes</h2><div class="pn">
+<h3>Position editor<em>15 Nov 2026</em></h3><ul><li>Drag the character in the Wallpaper preview to place it. Arrow keys nudge it by 1 px, Shift+arrow by 10 px.</li><li>New X, Y and Scale fields, plus Centre frames and Reset.</li><li>The finished video and the ffmpeg command both use your position and scale.</li><li>This Patch notes button.</li></ul>
+<h3>Size follows the background<em>14 Nov 2026</em></h3><ul><li>The video size now comes from your background image instead of the frames, which fixes the "cannot encode 3840x3996" error.</li><li>Frames keep their own size and are cropped to the background, like ffmpeg's overlay.</li></ul>
+<h3>Wallpaper tab<em>14 Nov 2026</em></h3><ul><li>Background plus a frame sequence in, a wallpaper MP4 out, all in your browser.</li><li>Aims for a target file size and re-encodes with a lower bitrate if the first try is too big.</li><li>H.264 or H.265, several resolutions, and a loop check with Ping-pong and Crossfade fixes.</li><li>Copyable ffmpeg command for the same settings.</li></ul></div>
+<div class="row"><span class="sp"></span><button class="btn" id="wpnx" type="button">Close</button></div></dialog>
 <script>/* mp4-muxer 5.1.3 (MIT, Vanilagy), bundled so the page needs no CDN */
 "use strict";
 var Mp4Muxer = (() => {
@@ -3757,8 +3769,9 @@ const sync=()=>{const v=$('#bgc').value;$('#bgh').textContent=v;document.querySe
 /* ---------- Wallpaper tab: background + frame sequence -> MP4 ---------- */
 (()=>{
 const g=id=>document.getElementById(id),IMG=/\.(png|jpe?g|webp|bmp|avif)$/i,isImg=f=>/^image\//.test(f.type)||IMG.test(f.name);
-let bg=null,bgS=null,bgP=null,bgW=0,bgH=0,fr=[],srcW=0,srcH=0,bad=false,fps=30,res='src',codec='h264',lm='none',loopRes=null,busy=false,pIdx=0,playing=false,ptok=0,ltok=0;
+let ox=0,oy=0,pc=null,bg=null,bgS=null,bgP=null,bgW=0,bgH=0,fr=[],srcW=0,srcH=0,bad=false,fps=30,res='src',codec='h264',lm='none',loopRes=null,busy=false,pIdx=0,playing=false,ptok=0,ltok=0;
 const even=n=>Math.max(2,Math.round(n/2)*2),ws=(t,e)=>{const q=g('wstat');q.className='note'+(e?' err':'');q.textContent=t};
+const zoom=()=>Math.min(400,Math.max(10,+g('wz').value||100))/100;
 const dims=async f=>{const b=await createImageBitmap(f),d=[b.width,b.height];b.close();return d};
 function cover(x,im,W,H){const s=Math.max(W/im.width,H/im.height),w=im.width*s,h=im.height*s;x.imageSmoothingQuality='high';x.drawImage(im,(W-w)/2,(H-h)/2,w,h)}
 function outSize(){const bw=bgW||srcW||3840,bh=bgH||srcH||2160;if(res==='src')return[even(bw),even(bh)];const W=+res;return[W,even(W*bh/bw)]}
@@ -3769,14 +3782,14 @@ function plan(){const n=fr.length;
  return fr.map((_,i)=>({a:i}))}
 function cmd(){const[W,H]=outSize(),m=(fr[0]?fr[0].name:'frame_001.png').match(/^(.*?)(\d+)(\.[^.]+)$/);let pat='frames/frame_%03d.png',sn='';
  if(m){pat=`frames/${m[1]}%0${m[2].length}d${m[3]}`;const s=parseInt(m[2],10);if(s)sn=`-start_number ${s} `}
- const fs=sc(W)!==1?'scale='+Math.round(srcW*sc(W))+':'+Math.round(srcH*sc(W)):'null',fc=`[0:v]scale=${W}:${H}:force_original_aspect_ratio=increase,crop=${W}:${H}[b];[1:v]${fs}[f];[b][f]overlay=shortest=1,format=yuv420p`,
+ const f=sc(W)*zoom(),fs=f!==1?'scale='+Math.round(srcW*f)+':'+Math.round(srcH*f):'null',fc=`[0:v]scale=${W}:${H}:force_original_aspect_ratio=increase,crop=${W}:${H}[b];[1:v]${fs}[f];[b][f]overlay=${Math.round(ox*sc(W))}:${Math.round(oy*sc(W))}:shortest=1,format=yuv420p`,
  e=codec==='h265'?'-c:v libx265 -preset slow -crf 26 -tag:v hvc1':'-c:v libx264 -preset slow -tune animation -crf 24';
  return `ffmpeg -loop 1 -framerate ${fps} -i "${bg?bg.name:'background.png'}" -framerate ${fps} ${sn}-i "${pat}" -filter_complex "${fc}" ${e} -an -movflags +faststart wallpaper.mp4`}
 function updateAll(){const[W,H]=outSize(),P=plan(),dur=P.length/fps,tgt=Math.max(1,+g('wtgt').value||16);
  g('wxfrow').hidden=lm!=='xfade';g('wcmd').textContent=cmd();
  g('wdur').textContent=fr.length?`= ${P.length} frames, ${dur.toFixed(1)} s`:'';g('wbr').textContent=fr.length?`= about ${(tgt*8*.9/dur).toFixed(1)} Mbit/s`:'';
  g('wfinfo').textContent=fr.length?`${fr.length} frames, ${srcW}x${srcH}, ${sz(fr.reduce((s,f)=>s+f.size,0))} of source files${bad?' (the last frame has a different size!)':''}`:'';
- g('wbginfo').textContent=bg?`${bg.name}: ${bgW}x${bgH}, ${sz(bg.size)}. Output size: ${W}x${H}.${fr.length&&(srcW!==bgW||srcH!==bgH)?` The frames are ${srcW}x${srcH}, so they sit in the top-left corner at their own size and anything outside the background is cropped.`:''}`:'';
+ g('wbginfo').textContent=bg?`${bg.name}: ${bgW}x${bgH}, ${sz(bg.size)}. Output size: ${W}x${H}.${fr.length&&(srcW!==bgW||srcH!==bgH)?` The frames are ${srcW}x${srcH}. Drag them in the preview to position them; anything outside the background is cropped.`:''}`:'';
  updLoop()}
 function updLoop(){const e=g('wloop');if(!loopRes){e.textContent='';e.className='wsum';return}
  const r=loopRes.jump/Math.max(loopRes.av,.05),jump=r>2&&loopRes.jump>.5;e.className='wsum'+(jump&&lm==='none'?' err':'');
@@ -3787,10 +3800,10 @@ const diff=(a,b)=>{let s=0;for(let i=0;i<a.length;i+=4)s+=Math.abs(a[i]-b[i])+Ma
 async function loopCheck(){const t=++ltok;loopRes=null;updLoop();const n=fr.length;if(n<3)return;
  try{ws('Checking the loop...');const K=Math.min(10,n-1);let s=0;for(let j=0;j<K;j++){const k=Math.floor(j*(n-2)/Math.max(1,K-1));s+=diff(await thumb(k),await thumb(k+1));if(t!==ltok)return}
   const jump=diff(await thumb(n-1),await thumb(0));if(t!==ltok)return;loopRes={av:s/K,jump};ws('');updLoop()}catch{if(t===ltok)ws('')}}
-async function drawPrev(i){const t=++ptok;if(!fr.length&&!bgP)return;let b=null;
- if(fr.length)try{{const ps=960/(bgW||srcW||960);b=await createImageBitmap(fr[i],{resizeWidth:Math.max(1,Math.round(srcW*ps)),resizeHeight:Math.max(1,Math.round(srcH*ps)),resizeQuality:'medium'})}}catch{}
- if(t!==ptok){b&&b.close();return}const pv=g('wprev'),w=960,h=bgP?Math.round(960*bgP.height/bgP.width):b?Math.round(960*b.height/b.width):540;
- if(pv.width!==w||pv.height!==h){pv.width=w;pv.height=h}const x=pv.getContext('2d');x.fillStyle='#000';x.fillRect(0,0,w,h);if(bgP)cover(x,bgP,w,h);if(b){x.drawImage(b,0,0);b.close()}
+async function drawPrev(i){const t=++ptok;if(!fr.length&&!bgP)return;const ps=960/(bgW||srcW||960),z=zoom();let b=null;
+ if(fr.length){const k=i+'|'+z+'|'+ps;if(pc&&pc.k===k)b=pc.b;else{try{const nb=await createImageBitmap(fr[i],{resizeWidth:Math.max(1,Math.round(srcW*ps*z)),resizeHeight:Math.max(1,Math.round(srcH*ps*z)),resizeQuality:'medium'});if(t!==ptok){nb.close();return}if(pc)pc.b.close();pc={k,b:nb};b=nb}catch{}}}
+ const pv=g('wprev'),w=960,h=bgP?Math.round(960*bgP.height/bgP.width):b?Math.round(960*b.height/b.width):540;
+ if(pv.width!==w||pv.height!==h){pv.width=w;pv.height=h}const x=pv.getContext('2d');x.fillStyle='#000';x.fillRect(0,0,w,h);if(bgP)cover(x,bgP,w,h);if(b)x.drawImage(b,Math.round(ox*ps),Math.round(oy*ps));
  g('wfn').textContent=fr.length?`${i+1} / ${fr.length}`:''}
 async function play(){if(playing){playing=false;g('wplay').textContent='Play';return}if(fr.length<2)return;playing=true;g('wplay').textContent='Pause';
  while(playing){const t0=performance.now();pIdx=(pIdx+1)%fr.length;g('wscrub').value=pIdx;await drawPrev(pIdx);await new Promise(r=>setTimeout(r,Math.max(0,1000/fps-(performance.now()-t0))))}}
@@ -3799,8 +3812,8 @@ async function setBg(f){if(!f||!isImg(f))return ws('That is not an image.',1);
  updateAll();drawPrev(pIdx);if(fr.length)loopCheck()}
 async function setFrames(list){const n=[...list].filter(isImg).sort(nat);if(!n.length)return ws('No images found in that selection.',1);
  try{const[w,h]=await dims(n[0]),[lw,lh]=await dims(n[n.length-1]);fr=n;srcW=w;srcH=h;bad=lw!==w||lh!==h;ws('')}catch{return ws('This browser could not read those images.',1)}
- pIdx=0;g('wscrub').max=fr.length-1;g('wscrub').value=0;updateAll();drawPrev(0);loopCheck()}
-function clearFrames(){playing=false;g('wplay').textContent='Play';fr=[];srcW=srcH=0;bad=false;loopRes=null;ltok++;g('wscrub').max=0;g('wscrub').value=0;g('wfn').textContent='';updateAll();drawPrev(0);ws('')}
+ if(pc){pc.b.close();pc=null}pIdx=0;g('wscrub').max=fr.length-1;g('wscrub').value=0;updateAll();drawPrev(0);loopCheck()}
+function clearFrames(){playing=false;g('wplay').textContent='Play';if(pc){pc.b.close();pc=null}fr=[];srcW=srcH=0;bad=false;loopRes=null;ltok++;g('wscrub').max=0;g('wscrub').value=0;g('wfn').textContent='';updateAll();drawPrev(0);ws('')}
 function zone(el,fn){el.addEventListener('dragenter',e=>{e.preventDefault();el.classList.add('hot')});el.addEventListener('dragover',e=>{e.preventDefault();el.classList.add('hot')});el.addEventListener('dragleave',()=>el.classList.remove('hot'));
  el.addEventListener('drop',e=>{e.preventDefault();el.classList.remove('hot');document.body.classList.remove('drag');fn(e.dataTransfer)})}
 zone(g('wbgdrop'),dt=>setBg([...dt.files].find(isImg)));
@@ -3822,10 +3835,10 @@ async function encodeOnce(cfg,br,P,W,H,bgC,pass,passes){
  const M=window.Mp4Muxer,target=new M.ArrayBufferTarget(),mux=new M.Muxer({target,video:{codec:codec==='h265'?'hevc':'avc',width:W,height:H,frameRate:fps},fastStart:'in-memory'});
  let fail;const enc=new VideoEncoder({output:(c,m)=>mux.addVideoChunk(c,m),error:e=>fail=e});enc.configure({...cfg,bitrate:br});
  const cv=document.createElement('canvas');cv.width=W;cv.height=H;const x=cv.getContext('2d',{alpha:false});x.imageSmoothingQuality='high';
- const s=sc(W),load=i=>createImageBitmap(fr[i],s!==1?{resizeWidth:Math.round(srcW*s),resizeHeight:Math.round(srcH*s),resizeQuality:'high'}:undefined),pre=new Map(),bar=g('wbar');bar.style.display='block';
+ const s=sc(W),f=s*zoom(),px=Math.round(ox*s),py=Math.round(oy*s),load=i=>createImageBitmap(fr[i],f!==1?{resizeWidth:Math.max(1,Math.round(srcW*f)),resizeHeight:Math.max(1,Math.round(srcH*f)),resizeQuality:'high'}:undefined),pre=new Map(),bar=g('wbar');bar.style.display='block';
  for(let k=0;k<P.length;k++){if(fail)throw fail;
   for(let j=k;j<Math.min(P.length,k+4);j++)if(!pre.has(j))pre.set(j,Promise.all([load(P[j].a),P[j].b!=null?load(P[j].b):null]));
-  const[A,B]=await pre.get(k);pre.delete(k);x.globalAlpha=1;x.drawImage(bgC,0,0);x.drawImage(A,0,0);if(B){x.globalAlpha=P[k].w;x.drawImage(B,0,0);x.globalAlpha=1}A.close();B&&B.close();
+  const[A,B]=await pre.get(k);pre.delete(k);x.globalAlpha=1;x.drawImage(bgC,0,0);x.drawImage(A,px,py);if(B){x.globalAlpha=P[k].w;x.drawImage(B,px,py);x.globalAlpha=1}A.close();B&&B.close();
   while(enc.encodeQueueSize>3)await nap();if(fail)throw fail;
   const vf=new VideoFrame(cv,{timestamp:Math.round(k*1e6/fps),duration:Math.round(1e6/fps)});enc.encode(vf,{keyFrame:k%(fps*4)===0});vf.close();
   bar.querySelector('i').style.width=100*(k+1)/P.length+'%';ws(`Pass ${pass}${passes?' of up to '+passes:''}: encoding frame ${k+1} of ${P.length}`)}
@@ -3845,6 +3858,15 @@ async function run(){if(busy)return;
   ws(best.size<=tgt?`Done: ${sz(best.size)}, ${W}x${H}, ${fps} fps, ${P.length} frames${tries>1?` (took ${tries} passes)`:''}.`:`Finished, but ${sz(best.size)} is still over your ${sz(tgt)} target. Try a lower resolution, fewer frames per second, or H.265.`,best.size>tgt)}
  catch(e){ws(e&&e.message?e.message:'Encoding failed.',1)}
  g('wbar').style.display='none';busy=false;g('wgo').disabled=false}
+const setOff=(x,y)=>{ox=Math.round(x);oy=Math.round(y);g('wx').value=ox;g('wy').value=oy;updateAll();drawPrev(pIdx)};
+g('wx').addEventListener('input',e=>{ox=Math.round(+e.target.value||0);updateAll();drawPrev(pIdx)});g('wy').addEventListener('input',e=>{oy=Math.round(+e.target.value||0);updateAll();drawPrev(pIdx)});g('wz').addEventListener('input',()=>{updateAll();drawPrev(pIdx)});
+g('wctr').onclick=()=>{const z=zoom();setOff(((bgW||srcW)-srcW*z)/2,((bgH||srcH)-srcH*z)/2)};g('wrst').onclick=()=>{g('wz').value=100;setOff(0,0)};
+const cvp=g('wprev');let dr=null;
+cvp.addEventListener('pointerdown',e=>{if(!fr.length)return;cvp.setPointerCapture(e.pointerId);dr={x:e.clientX,y:e.clientY,ox,oy}});
+cvp.addEventListener('pointermove',e=>{if(!dr)return;const k=(bgW||srcW)/cvp.getBoundingClientRect().width;setOff(dr.ox+(e.clientX-dr.x)*k,dr.oy+(e.clientY-dr.y)*k)});
+['pointerup','pointercancel'].forEach(t=>cvp.addEventListener(t,()=>{dr=null}));
+cvp.addEventListener('keydown',e=>{const d={ArrowLeft:[-1,0],ArrowRight:[1,0],ArrowUp:[0,-1],ArrowDown:[0,1]}[e.key];if(!d)return;e.preventDefault();const st=e.shiftKey?10:1;setOff(ox+d[0]*st,oy+d[1]*st)});
+const pnd=g('wpnd');g('wpn').onclick=()=>pnd.showModal();g('wpnx').onclick=()=>pnd.close();pnd.addEventListener('click',e=>{if(e.target===pnd)pnd.close()});
 g('wgo').onclick=run;updateAll();
 })();
 </script>

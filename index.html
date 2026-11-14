@@ -184,6 +184,7 @@ dialog#wpnd{background:var(--panel);color:var(--ivory);border:1px solid var(--li
 </div>
 </main></div>
 <dialog id="wpnd"><h2>Patch notes</h2><div class="pn">
+<h3>Stutter fix<em>15 Nov 2026</em></h3><ul><li>Videos no longer get an extra keyframe every 4 seconds, which caused a tiny hitch at that point. A clip now has one keyframe at the start (one every 20 seconds for very long clips).</li><li>The ffmpeg command uses the same setting.</li></ul>
 <h3>Position editor<em>15 Nov 2026</em></h3><ul><li>Drag the character in the Wallpaper preview to place it. Arrow keys nudge it by 1 px, Shift+arrow by 10 px.</li><li>New X, Y and Scale fields, plus Centre frames and Reset.</li><li>The finished video and the ffmpeg command both use your position and scale.</li><li>This Patch notes button.</li></ul>
 <h3>Size follows the background<em>14 Nov 2026</em></h3><ul><li>The video size now comes from your background image instead of the frames, which fixes the "cannot encode 3840x3996" error.</li><li>Frames keep their own size and are cropped to the background, like ffmpeg's overlay.</li></ul>
 <h3>Wallpaper tab<em>14 Nov 2026</em></h3><ul><li>Background plus a frame sequence in, a wallpaper MP4 out, all in your browser.</li><li>Aims for a target file size and re-encodes with a lower bitrate if the first try is too big.</li><li>H.264 or H.265, several resolutions, and a loop check with Ping-pong and Crossfade fixes.</li><li>Copyable ffmpeg command for the same settings.</li></ul></div>
@@ -3783,7 +3784,7 @@ function plan(){const n=fr.length;
 function cmd(){const[W,H]=outSize(),m=(fr[0]?fr[0].name:'frame_001.png').match(/^(.*?)(\d+)(\.[^.]+)$/);let pat='frames/frame_%03d.png',sn='';
  if(m){pat=`frames/${m[1]}%0${m[2].length}d${m[3]}`;const s=parseInt(m[2],10);if(s)sn=`-start_number ${s} `}
  const f=sc(W)*zoom(),fs=f!==1?'scale='+Math.round(srcW*f)+':'+Math.round(srcH*f):'null',fc=`[0:v]scale=${W}:${H}:force_original_aspect_ratio=increase,crop=${W}:${H}[b];[1:v]${fs}[f];[b][f]overlay=${Math.round(ox*sc(W))}:${Math.round(oy*sc(W))}:shortest=1,format=yuv420p`,
- e=codec==='h265'?'-c:v libx265 -preset slow -crf 26 -tag:v hvc1':'-c:v libx264 -preset slow -tune animation -crf 24';
+ e=codec==='h265'?'-c:v libx265 -preset slow -crf 26 -tag:v hvc1 -g '+plan().length:'-c:v libx264 -preset slow -tune animation -crf 24 -g '+plan().length+' -sc_threshold 0';
  return `ffmpeg -loop 1 -framerate ${fps} -i "${bg?bg.name:'background.png'}" -framerate ${fps} ${sn}-i "${pat}" -filter_complex "${fc}" ${e} -an -movflags +faststart wallpaper.mp4`}
 function updateAll(){const[W,H]=outSize(),P=plan(),dur=P.length/fps,tgt=Math.max(1,+g('wtgt').value||16);
  g('wxfrow').hidden=lm!=='xfade';g('wcmd').textContent=cmd();
@@ -3840,7 +3841,7 @@ async function encodeOnce(cfg,br,P,W,H,bgC,pass,passes){
   for(let j=k;j<Math.min(P.length,k+4);j++)if(!pre.has(j))pre.set(j,Promise.all([load(P[j].a),P[j].b!=null?load(P[j].b):null]));
   const[A,B]=await pre.get(k);pre.delete(k);x.globalAlpha=1;x.drawImage(bgC,0,0);x.drawImage(A,px,py);if(B){x.globalAlpha=P[k].w;x.drawImage(B,px,py);x.globalAlpha=1}A.close();B&&B.close();
   while(enc.encodeQueueSize>3)await nap();if(fail)throw fail;
-  const vf=new VideoFrame(cv,{timestamp:Math.round(k*1e6/fps),duration:Math.round(1e6/fps)});enc.encode(vf,{keyFrame:k%(fps*4)===0});vf.close();
+  const vf=new VideoFrame(cv,{timestamp:Math.round(k*1e6/fps),duration:Math.round(1e6/fps)});enc.encode(vf,{keyFrame:k%(fps*20)===0});vf.close();
   bar.querySelector('i').style.width=100*(k+1)/P.length+'%';ws(`Pass ${pass}${passes?' of up to '+passes:''}: encoding frame ${k+1} of ${P.length}`)}
  await enc.flush();if(fail)throw fail;enc.close();mux.finalize();return new Blob([target.buffer],{type:'video/mp4'})}
 async function run(){if(busy)return;
